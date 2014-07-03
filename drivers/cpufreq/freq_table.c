@@ -115,7 +115,7 @@ int cpufreq_frequency_table_target(struct cpufreq_policy *policy,
 		.driver_data = ~0,
 		.frequency = 0,
 	};
-	unsigned int i;
+	unsigned int i, diff;
 
 	pr_debug("request for target %u kHz (relation: %u) for cpu %u\n",
 					target_freq, relation, policy->cpu);
@@ -125,6 +125,9 @@ int cpufreq_frequency_table_target(struct cpufreq_policy *policy,
 		suboptimal.frequency = ~0;
 		break;
 	case CPUFREQ_RELATION_L:
+		optimal.frequency = ~0;
+		break;
+	case CPUFREQ_RELATION_C:
 		optimal.frequency = ~0;
 		break;
 	}
