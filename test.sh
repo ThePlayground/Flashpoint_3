@@ -11,5 +11,5 @@ cp output/arch/arm/boot/zImage $(pwd)/AIK/split_img/boot.img-zImage
 ./tools/dtbTool -o ./AIK/split_img/boot.img-dtb -s 4096 -p ./output/scripts/dtc/ ./output/arch/arm/boot/dts/
 ./AIK/repackimg.sh
 mv ./AIK/image-new.img ./boot.img
-rm ./AIK/split_img/boot.img-dtb
-rm ./AIK/split_img/boot.img-zImage
+#rm ./AIK/split_img/boot.img-dtb
+#rm ./AIK/split_img/boot.img-zImage
