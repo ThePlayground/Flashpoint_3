@@ -15,6 +15,7 @@ bin/
 gen/
 out/
 AIK/
+AIK-port/
 arm-eabi-4.8/
 
 # Gradle files
