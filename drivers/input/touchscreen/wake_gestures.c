@@ -44,7 +44,7 @@
 #define WG_DEFAULT		0
 #define S2W_DEFAULT		0
 #define S2S_DEFAULT		0
-#define DT2W_DEFAULT	0
+#define DT2W_DEFAULT	1
 #define DT2S_DEFAULT	0
 #define WG_PWRKEY_DUR           60
 
@@ -115,7 +115,7 @@ static DECLARE_DELAYED_WORK(work_tw_timeout, tw_timeout_work);
 static bool flg_sensor_prox_detecting = false;
 
 /* Externals */
-bool flg_power_suspended;
+extern bool flg_power_suspended;
 extern struct timeval time_power_suspended;
 extern struct timeval time_pressed_power;
 extern bool flg_tsp_always_on;
