@@ -134,7 +134,8 @@ static u64 boostpulse_endtime;
 #define DEFAULT_TIMER_SLACK (4 * DEFAULT_TIMER_RATE)
 static int timer_slack_val = DEFAULT_TIMER_SLACK;
 
-#define TOP_STOCK_FREQ 2419200
+#define TOP_STOCK_FREQ 1958400
+unsigned int max_gov_freq = TOP_STOCK_FREQ;
 
 static bool io_is_busy;
 
@@ -153,8 +154,8 @@ static spinlock_t mode_lock;
 #define SINGLE_MODE	1
 #define NO_MODE	0
 
-static unsigned int mode = 0;
-static unsigned int enforced_mode = 0;
+static unsigned int mode = MULTI_MODE;
+static unsigned int enforced_mode = 1;
 static u64 mode_check_timestamp = 0;
 
 #define DEFAULT_MULTI_ENTER_TIME (4 * DEFAULT_TIMER_RATE)
@@ -219,7 +220,7 @@ static unsigned int up_threshold_any_cpu_freq;
 static int cpufreq_governor_umbrella_core(struct cpufreq_policy *policy,
 		unsigned int event);
 
-#ifndef CONFIG_CPU_FREQ_DEFAULT_GOV_umbrella_core
+#ifndef CONFIG_CPU_FREQ_DEFAULT_GOV_UMBRELLA_CORE
 static
 #endif
 struct cpufreq_governor cpufreq_gov_umbrella_core = {
@@ -644,8 +645,8 @@ static void cpufreq_umbrella_core_timer(unsigned long data)
 			if (new_freq < hispeed_freq)
 				new_freq = hispeed_freq;
 		}
-		if (new_freq > TOP_STOCK_FREQ && cpu_load < 99)
-			new_freq = TOP_STOCK_FREQ;
+		if (new_freq > max_gov_freq && cpu_load < 99)
+			new_freq = max_gov_freq;
 	} else {
 		new_freq = choose_freq(pcpu, loadadjfreq);
 
@@ -1903,14 +1904,14 @@ static int cpufreq_governor_umbrella_core(struct cpufreq_policy *policy,
 static void cpufreq_umbrella_core_power_suspend(struct power_suspend *h)
 {
     mutex_lock(&gov_lock);
-    // Add proper handling of suspend
+    max_gov_freq = 1036800;
     mutex_unlock(&gov_lock);
 }
 
 static void cpufreq_umbrella_core_power_resume(struct power_suspend *h)
 {
     mutex_lock(&gov_lock);
-    // Add proper handling of resume
+    max_gov_freq = 1958400;
     mutex_unlock(&gov_lock);
 }
 
@@ -1987,7 +1988,7 @@ static void mode_auto_change_boost(struct work_struct *work)
 }
 #endif	// CONFIG_MODE_AUTO_CHANGE_BOOST
 
-#ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_umbrella_core
+#ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_UMBRELLA_CORE
 fs_initcall(cpufreq_umbrella_core_init);
 #else
 module_init(cpufreq_umbrella_core_init);
