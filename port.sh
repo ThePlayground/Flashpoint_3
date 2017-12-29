@@ -4,7 +4,7 @@ export ARCH=arm
 export CROSS_COMPILE=$(pwd)/arm-eabi-5.3/bin/arm-eabi-
 mkdir output
 
-make -C $(pwd) O=output apq8084_sec_defconfig VARIANT_DEFCONFIG=apq8084_sec_trlte_tmo_defconfig SELINUX_DEFCONFIG=selinux_defconfig
+make -C $(pwd) O=output apq8084_sec_defconfig VARIANT_DEFCONFIG=apq8084_sec_trlte_vzw_defconfig SELINUX_DEFCONFIG=selinux_defconfig
 make -j64 -C $(pwd) O=output
 
 cp output/arch/arm/boot/zImage $(pwd)/AIK-port/split_img/boot.img-zImage
